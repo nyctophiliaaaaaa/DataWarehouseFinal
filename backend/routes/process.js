@@ -84,6 +84,36 @@ router.post('/load', async (req, res) => {
   }
 });
 
+
+router.post('/denormalize', async (req, res) => {
+  try {
+    console.log(`🔄 Building denormalized table...`);
+    
+    const { data, error } = await supabase.rpc('sp_build_denorm_table');
+    
+    if (error) {
+      console.error('Supabase error:', error);
+      return res.status(500).json({ 
+        success: false, 
+        error: error.message || 'Denormalization failed'
+      });
+    }
+    
+    console.log(`✅ Denormalization complete`);
+    
+    res.json({ 
+      success: true, 
+      message: 'Denormalized table built successfully',
+      data 
+    });
+  } catch (error) {
+    console.error('❌ Denormalization error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message || 'Internal server error'
+    });
+  }
+});
 /**
  * POST /api/process
  * Triggers the Master Pipeline (Clean + Load) for ALL datasets

@@ -89,6 +89,27 @@ class APIService {
     }
   }
 
+async denormalizeData() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/process/denormalize`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || error.error || 'Denormalization failed');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Denormalize error:', error);
+    throw error;
+  }
+}
+
   /**
    * Get audit logs
    * @param {number} limit - Number of logs to fetch

@@ -71,11 +71,14 @@ router.post('/', upload.single('file'), async (req, res) => {
         .select(); // essential to verify data was returned
 
       if (insertError) {
-        console.error(`❌ DATABASE INSERT FAILED:`, insertError);
-        return res.status(500).json({ 
-          error: `Database insert failed: ${insertError.message}. Check RLS policies!` 
-        });
-      }
+    console.error(`❌ CRITICAL INSERT FAILED for ${tableName}:`, insertError);
+    console.error('  -- MESSAGE:', insertError.message);
+    console.error('  -- DETAILS:', insertError.details); // This often names the column!
+
+    return res.status(500).json({ 
+        error: `Database insert failed: ${insertError.message}. Details: ${insertError.details}` 
+    });
+}
 
       console.log(`✅ SUCCESS: Inserted ${data?.length || records.length} rows.`);
 
