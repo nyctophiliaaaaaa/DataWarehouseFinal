@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 // ✨ ADD THIS ROOT ROUTE ✨
 app.get('/', (req, res) => {
   res.json({
-    message: '✈️ Airline ETL API',
+    message: '✈️ Airline ELT API',
     version: '1.0.0',
     endpoints: {
       health: '/health',
